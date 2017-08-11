@@ -451,7 +451,7 @@ var joyrideDirective = function($animate, joyrideService, $compile, $templateReq
           this.current = step;
         }
     },
-    exit: exitJoyride()
+    exit: this.exitJoyride()
     };
   }
 
