@@ -125,8 +125,15 @@ var joyrideDirective = function($animate, joyrideService, $compile, $templateReq
         }
 
         function exitJoyride() {
-            $animate.removeClass(joyrideContainer, 'jr_start').then(joyrideEnded);
+            removeJoyride();
+            if (joyrideContainer) {
+                $animate.removeClass(joyrideContainer, 'jr_start').then(joyrideEnded);
+            }
         }
+
+        scope.$on('exitJoyride', function(event) {
+            exitJoyride();
+        });
 
         //////// Watching for change in the start variable
           scope.$watch('joyride.start', function(show, oldShow) {
@@ -163,7 +170,7 @@ var joyrideDirective = function($animate, joyrideService, $compile, $templateReq
                 exitJoyride();
               }
           }
-        });
+      }, true);
 
         //////////// Watching for transition trigger
         scope.$watch('joyride.transitionStep', function(val, oldVal) {
@@ -187,7 +194,7 @@ var joyrideDirective = function($animate, joyrideService, $compile, $templateReq
               $animate.removeClass(joyrideContainer, 'jr_transition');
             }
           }
-        });
+      }, true);
 
         ////// check for afterStep function before going to next step
         function beforeTransition(){
@@ -237,7 +244,7 @@ var joyrideDirective = function($animate, joyrideService, $compile, $templateReq
                 scope.joyride.config.steps[scope.joyride.current].beforeStep(scope.joyride.resumeJoyride);
               }
 
-              else{
+              else {
                 scope.joyride.resumeJoyride();
               }
 
@@ -425,7 +432,7 @@ var joyrideDirective = function($animate, joyrideService, $compile, $templateReq
   }
 
 ////////******* Joyride Service *******//////////
-  var joyrideService = function(){
+  var joyrideService = function() {
     return {
       current : 0,
       transitionStep: true,
@@ -450,8 +457,7 @@ var joyrideDirective = function($animate, joyrideService, $compile, $templateReq
         if (step) {
           this.current = step;
         }
-    },
-    exit: this.exitJoyride()
+    }
     };
   }
 
